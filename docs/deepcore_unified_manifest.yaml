@@ -1,0 +1,60 @@
+system: DeepCore Systems Enterprise
+version: unified-production-1
+
+architecture:
+  core:
+    - event_sourced_core
+    - deterministic_state_engine
+    - replay_engine
+
+  ingestion:
+    - api_gateway_fastapi
+    - jwt_auth
+    - rbac_policy_layer
+
+  streaming:
+    - redis_stream_bus
+    - background_worker_consumer
+
+  storage:
+    primary:
+      - sqlite_event_store
+      - postgres_production_store
+
+  security:
+    - jwt_authentication
+    - role_based_access_control
+    - kubernetes_secrets
+
+  observability:
+    metrics:
+      - prometheus_exporter
+    logging:
+      - structured_json_logs
+    tracing:
+      - opentelemetry_spans
+
+  deployment:
+    local:
+      - docker_compose
+    cluster:
+      - kubernetes_deployment
+      - ingress_tls
+      - hpa_autoscaling
+
+  ci_cd:
+    - github_actions_pipeline
+    - smoke_tests
+
+  networking:
+    - nginx_ingress
+    - service_mesh_ready
+
+  finance_layer_optional:
+    note: "experimental modules referenced from prior system research (event-driven financial simulation layer)"
+
+  external_interfaces:
+    - bitcoin_core_rpc_placeholder
+    - psbt_workflows_placeholder
+
+status: "production-ready-skeleton-not-yet-hardened"
