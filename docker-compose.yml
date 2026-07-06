@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    container_name: deepcore-api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/worker.Dockerfile
+    container_name: deepcore-worker
+    depends_on:
+      - redis
+      - postgres
+      - api
+
+  redis:
+    image: redis:7-alpine
+    container_name: deepcore-redis
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:15
+    container_name: deepcore-postgres
+    environment:
+      POSTGRES_USER: deepcore
+      POSTGRES_PASSWORD: deepcore
+      POSTGRES_DB: deepcore
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
