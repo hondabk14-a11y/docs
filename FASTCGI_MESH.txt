@@ -1,0 +1,1 @@
+Persistent worker mesh over Unix sockets and mTLS.

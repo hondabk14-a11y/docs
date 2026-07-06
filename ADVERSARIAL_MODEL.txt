@@ -1,0 +1,1 @@
+Finite adversarial basis sets and adaptive pressure dynamics.
