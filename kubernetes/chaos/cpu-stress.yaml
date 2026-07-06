@@ -1,0 +1,29 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: deepcore-cpu-stress
+spec:
+  selector:
+    labelSelectors:
+      app: deepcore-api
+  mode: one
+  stressors:
+    cpu:
+      workers: 2
+      load: 80
+  duration: "120s"
+---
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: deepcore-network-latency
+spec:
+  action: delay
+  mode: all
+  selector:
+    labelSelectors:
+      app: deepcore-worker
+  delay:
+    latency: "200ms"
+    jitter: "50ms"
+  duration: "180s"
