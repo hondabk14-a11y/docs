@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deepcore-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deepcore-api
+  template:
+    metadata:
+      labels:
+        app: deepcore-api
+    spec:
+      containers:
+        - name: api
+          image: deepcore/api:1.0.0
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PYTHONPATH
+              value: /app/src
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deepcore-api-service
+spec:
+  selector:
+    app: deepcore-api
+  ports:
+    - port: 80
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deepcore-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deepcore-worker
+  template:
+    metadata:
+      labels:
+        app: deepcore-worker
+    spec:
+      containers:
+        - name: worker
+          image: deepcore/worker:1.0.0
+          env:
+            - name: PYTHONPATH
+              value: /app/src
