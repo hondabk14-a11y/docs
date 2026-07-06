@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: "deepcore-api"
+    static_configs:
+      - targets: ["api:8000"]
+
+  - job_name: "deepcore-worker"
+    static_configs:
+      - targets: ["worker:8000"]
+
+rule_files:
+  - "alert.rules.yml"
