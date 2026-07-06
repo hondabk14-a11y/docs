@@ -1,0 +1,39 @@
+groups:
+  - name: deepcore-alerts
+    rules:
+
+      - alert: HighEventProcessingLatency
+        expr: histogram_quantile(0.95, deepcore_event_processing_seconds_bucket) > 0.5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High event processing latency"
+          description: "95th percentile event processing time is above 500ms"
+
+      - alert: EventThroughputDrop
+        expr: rate(deepcore_events_processed_total[5m]) < 1
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Event throughput dropped"
+          description: "Event processing rate has dropped significantly"
+
+      - alert: WorkerDown
+        expr: up{job="deepcore-worker"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Worker is down"
+          description: "DeepCore worker process is not responding"
+
+      - alert: APIHighErrorRate
+        expr: rate(http_requests_total{job="deepcore-api",status=~"5.."}[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API error rate"
+          description: "API is returning a high number of 5xx responses"
